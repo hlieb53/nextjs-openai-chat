@@ -3,26 +3,8 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-export function UploadForm({ emailRef, ...props }) {
+export function UploadForm({ ...props }) {
   const [files, setFiles] = useState();
-
-  const onEmbed = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_DOMAIN}/qa/embed?email=${emailRef?.current?.value}`,
-        {
-          method: "POST",
-        }
-      );
-      if (!res.ok) throw new Error(await res.text());
-      toast.success((await res.json()).message);
-    } catch (error) {
-      // Handle errors here
-      console.error(e);
-      toast.error(e.message);
-    }
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -33,9 +15,8 @@ export function UploadForm({ emailRef, ...props }) {
       const data = new FormData();
       for (let i = 0; i < files.length; ++i) data.append(`files`, files[i]);
 
-      console.log("Email:", emailRef?.current?.value);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_DOMAIN}/documents/upload?email=${emailRef?.current?.value}`,
+        `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_DOMAIN}/embed`,
         {
           method: "POST",
           body: data,
@@ -65,7 +46,7 @@ export function UploadForm({ emailRef, ...props }) {
         name="file"
         id="file"
         multiple
-        onChange={(e) => setFiles(e.target.files)}
+        onChange={(e) => {console.log("AAA"); setFiles(e.target.files)}}
         hidden
       />
       <input
@@ -74,12 +55,6 @@ export function UploadForm({ emailRef, ...props }) {
         className="rounded border-2 border-[#b02a37] ml-2 p-2 text-sm flex-1 text-center"
         style={{ visibility: files?.length > 0 ? "visible" : "hidden" }}
       />
-      <button
-        className="rounded border-2 border-[#198754] ml-2 p-2 text-sm flex-1 text-center visible"
-        onClick={onEmbed}
-      >
-        🔒 Embed
-      </button>
     </form>
   );
 }

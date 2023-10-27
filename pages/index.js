@@ -37,7 +37,6 @@ export default function PageHome() {
 
   // state text
   const [text, setText] = useState("");
-  const emailRef = useRef(null);
   // const parentChatRef = useRef(null)
 
   // handler form submit
@@ -59,13 +58,12 @@ export default function PageHome() {
       event.preventDefault();
       console.log(process.env);
       // if text greater than 0 and less than 300 character do it
-      if (emailRef?.current?.value /* && parentChatRef?.current?.value*/) {
+      if (true /* && parentChatRef?.current?.value*/) {
         let newWS = new WebSocket(
           `${process.env.NEXT_PUBLIC_PROTOCOL == "http" ? "ws" : "wss"}://${
             process.env.NEXT_PUBLIC_DOMAIN
-          }/qa/retrieve/abcdefghij/ws?email=${emailRef?.current.value}`
+          }/qa`
         );
-        // let newWS = new WebSocket(`${process.env.NEXT_PUBLIC_PROTOCOL == 'http' ? 'ws' : 'wss'}://${process.env.NEXT_PUBLIC_DOMAIN}/qa/retrieve/${parentChatRef?.current.value}/ws?email=${emailRef?.current.value}`)
         newWS.onclose = () => {
           console.log("websocket disconnected");
           // toast.success("Previous websocket disconnected")
@@ -79,7 +77,7 @@ export default function PageHome() {
       }
       setText("");
     },
-    [emailRef?.current?.value /*, parentChatRef?.current?.value*/, setWS]
+    [setWS]
   );
 
   const handleDataReceived = useCallback(
@@ -169,24 +167,12 @@ export default function PageHome() {
                 </div>
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex">
                 <form
                   onSubmit={handlerSubmitWebsocket}
-                  className="flex items-center"
+                  className="flex items-center mt-2 mx-3"
                 >
-                  <input
-                    className="flex items-center h-10 rounded px-3 mx-3 text-sm ring-1 ring-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-600 input-chat"
-                    ref={emailRef}
-                    type="text"
-                    placeholder="Email"
-                  />
-                  {/* <input
-                    className="flex-1 flex items-center h-10 w-full rounded px-3 mx-3 text-sm ring-1 ring-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-600 input-chat"
-                    type="text"
-                    placeholder="Chat Id"
-                    ref={parentChatRef}
-                    hidden
-                  /> */}
+                  <div className="flex px-3 mx-3"></div>
                   <button
                     type="submit"
                     className="flex items-center h-10 rounded px-3 mx-3 text-sm ring-1 ring-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
@@ -195,7 +181,6 @@ export default function PageHome() {
                   </button>
                 </form>
                 <UploadForm
-                  emailRef={emailRef}
                   className="flex items-center mt-2 mx-3"
                 />
               </div>
